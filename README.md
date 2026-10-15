@@ -1,5 +1,7 @@
 # Aurex SFTP
 
+[![Version](https://img.shields.io/visual-studio-marketplace/v/amanazkar.aurex-sftp?label=VS%20Marketplace&color=2563eb)](https://marketplace.visualstudio.com/items?itemName=amanazkar.aurex-sftp) [![Installs](https://img.shields.io/visual-studio-marketplace/i/amanazkar.aurex-sftp?color=0d9488)](https://marketplace.visualstudio.com/items?itemName=amanazkar.aurex-sftp) [![Rating](https://img.shields.io/visual-studio-marketplace/r/amanazkar.aurex-sftp)](https://marketplace.visualstudio.com/items?itemName=amanazkar.aurex-sftp&ssr=false#review-details)
+
 Deploy to SFTP, FTP and FTPS servers from VS Code without the usual surprises.
 
 - **Upload on save that you can trust.** Connections reconnect and retry when they drop. Rapid saves collapse into one upload, so two uploads of the same file never race. A failure shows a notification with a **Retry** button, never a silent miss.
@@ -11,6 +13,8 @@ Deploy to SFTP, FTP and FTPS servers from VS Code without the usual surprises.
 - **Drop-in for the Natizyskunk / liximomo SFTP extension.** It reads your existing `.vscode/sftp.json`, including `context`, `ignore`, `ignoreFile`, `profiles`/`defaultProfile`, `privateKeyPath`, `passphrase`, `agent`, `secure` and `useTempFile`.
 
 ## Getting started
+
+Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=amanazkar.aurex-sftp), or run `ext install amanazkar.aurex-sftp` in Quick Open (Cmd/Ctrl+P).
 
 1. Open a workspace. If it already has `.vscode/sftp.json`, you're done.
 2. Otherwise click **Aurex SFTP → +** in the activity bar, or run **Aurex SFTP: Add Server…**.
