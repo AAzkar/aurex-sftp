@@ -7,7 +7,7 @@ import * as path from 'path';
 const { FtpSrv } = require('ftp-srv');
 
 async function main() {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'sftp-plus-it-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'aurex-sftp-it-'));
   const ftpRoot = path.join(tmp, 'server');
   const ws = path.join(tmp, 'ws');
   fs.mkdirSync(path.join(ftpRoot, 'www'), { recursive: true });
@@ -40,7 +40,7 @@ async function main() {
       vscodeExecutablePath: '/Applications/Visual Studio Code.app/Contents/MacOS/Code',
       extensionDevelopmentPath: path.resolve(__dirname, '../../..'),
       extensionTestsPath: path.resolve(__dirname, 'suite.js'),
-      extensionTestsEnv: { FTP_ROOT: ftpRoot, SFTP_PLUS_DEBUG: '1' },
+      extensionTestsEnv: { FTP_ROOT: ftpRoot, AUREX_SFTP_DEBUG: '1' },
       launchArgs: [ws, '--disable-extensions', '--skip-welcome', '--skip-release-notes', `--user-data-dir=${path.join(tmp, 'user')}`],
     });
   } catch (err) {

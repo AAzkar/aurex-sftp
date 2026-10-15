@@ -90,7 +90,7 @@ async function exerciseClient(label: string, c: RemoteClient, scratch: string, o
 }
 
 async function main() {
-  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'sftp-plus-test-'));
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'aurex-sftp-test-'));
   const sftpRoot = path.join(scratch, 'sftp-root');
   const ftpRoot = path.join(scratch, 'ftp-root');
   fs.mkdirSync(sftpRoot);

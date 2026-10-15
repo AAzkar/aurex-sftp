@@ -4,14 +4,14 @@ import { Profile } from './config';
 import type { Services } from './services';
 import { friendlyError, isNotFound } from './util';
 
-export const SCHEME = 'sftp-plus';
+export const SCHEME = 'aurex-sftp';
 
 export function remoteUri(p: Profile, remotePath: string): vscode.Uri {
   return vscode.Uri.from({ scheme: SCHEME, authority: p.id, path: remotePath });
 }
 
 /**
- * Exposes servers as a VS Code file system (sftp-plus://<profile-id>/abs/path), so remote files
+ * Exposes servers as a VS Code file system (aurex-sftp://<profile-id>/abs/path), so remote files
  * open in normal editors, saves write straight to the server, and diffs work against them.
  * VS Code's own "file is newer on disk" check covers edits made by others while a file is open.
  */

@@ -23,12 +23,12 @@ export async function run(): Promise<void> {
     results.push(`  ✓ ${name}`);
   };
 
-  const ext = vscode.extensions.getExtension('amanazkar.sftp-plus');
+  const ext = vscode.extensions.getExtension('amanazkar.aurex-sftp');
   await step('extension activates from .vscode/sftp.json', async () => {
     assert.ok(ext, 'extension found');
     await ext!.activate();
     const commands = await vscode.commands.getCommands(true);
-    for (const c of ['sftpPlus.upload', 'sftpPlus.syncToRemote', 'sftpPlus.remote.delete', 'sftpPlus.addServer']) assert.ok(commands.includes(c), c);
+    for (const c of ['aurexSftp.upload', 'aurexSftp.syncToRemote', 'aurexSftp.remote.delete', 'aurexSftp.addServer']) assert.ok(commands.includes(c), c);
   });
 
   const file = path.join(ws, 'src', 'hello.php');
@@ -63,21 +63,21 @@ export async function run(): Promise<void> {
   });
 
   await step('Upload command uploads a whole folder', async () => {
-    await vscode.commands.executeCommand('sftpPlus.upload', vscode.Uri.file(path.join(ws, 'assets')));
+    await vscode.commands.executeCommand('aurexSftp.upload', vscode.Uri.file(path.join(ws, 'assets')));
     await waitFor('folder upload', () => fs.existsSync(path.join(remoteRoot, 'assets', 'css', 'site.css')));
   });
 
-  await step('remote files open through the sftp-plus:// file system', async () => {
+  await step('remote files open through the aurex-sftp:// file system', async () => {
     fs.writeFileSync(path.join(remoteRoot, 'server-only.txt'), 'from the server');
-    const uri = vscode.Uri.from({ scheme: 'sftp-plus', authority: 'ws-test', path: '/www/server-only.txt' });
+    const uri = vscode.Uri.from({ scheme: 'aurex-sftp', authority: 'ws-test', path: '/www/server-only.txt' });
     const doc = await vscode.workspace.openTextDocument(uri);
     assert.equal(doc.getText(), 'from the server');
-    const entries = await vscode.workspace.fs.readDirectory(vscode.Uri.from({ scheme: 'sftp-plus', authority: 'ws-test', path: '/www' }));
+    const entries = await vscode.workspace.fs.readDirectory(vscode.Uri.from({ scheme: 'aurex-sftp', authority: 'ws-test', path: '/www' }));
     assert.deepEqual(entries.map(([n]) => n).sort(), ['assets', 'server-only.txt', 'src']);
   });
 
   await step('editing a remote file writes it back to the server', async () => {
-    const uri = vscode.Uri.from({ scheme: 'sftp-plus', authority: 'ws-test', path: '/www/server-only.txt' });
+    const uri = vscode.Uri.from({ scheme: 'aurex-sftp', authority: 'ws-test', path: '/www/server-only.txt' });
     await vscode.workspace.fs.writeFile(uri, Buffer.from('changed in editor'));
     assert.equal(fs.readFileSync(path.join(remoteRoot, 'server-only.txt'), 'utf8'), 'changed in editor');
   });
@@ -85,18 +85,18 @@ export async function run(): Promise<void> {
   await step('Download command fetches the server version', async () => {
     const local = path.join(ws, 'server-only.txt');
     fs.writeFileSync(local, 'stale');
-    await vscode.commands.executeCommand('sftpPlus.download', vscode.Uri.file(local));
+    await vscode.commands.executeCommand('aurexSftp.download', vscode.Uri.file(local));
     assert.equal(fs.readFileSync(local, 'utf8'), 'changed in editor');
   });
 
   await step('sftp.json passwords move to the keychain without losing comments', async () => {
-    await vscode.commands.executeCommand('sftpPlus.moveSecretsToKeychain');
+    await vscode.commands.executeCommand('aurexSftp.moveSecretsToKeychain');
     const text = fs.readFileSync(path.join(ws, '.vscode', 'sftp.json'), 'utf8');
     assert.ok(!text.includes('s3cret'), 'password removed');
     assert.ok(text.includes('// deploy target'), 'comment preserved');
     // Still connects: the password now comes from SecretStorage.
-    await vscode.commands.executeCommand('sftpPlus.disconnectAll');
-    await vscode.commands.executeCommand('sftpPlus.upload', vscode.Uri.file(path.join(ws, 'src', 'other.php')));
+    await vscode.commands.executeCommand('aurexSftp.disconnectAll');
+    await vscode.commands.executeCommand('aurexSftp.upload', vscode.Uri.file(path.join(ws, 'src', 'other.php')));
     await waitFor('upload after migration', () => fs.existsSync(path.join(remoteRoot, 'src', 'other.php')));
   });
 

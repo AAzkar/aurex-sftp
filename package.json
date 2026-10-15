@@ -1,8 +1,8 @@
 {
-  "name": "sftp-plus",
-  "displayName": "SFTP Plus",
+  "name": "aurex-sftp",
+  "displayName": "Aurex SFTP",
   "description": "Reliable SFTP / FTP / FTPS deploys: upload on save with conflict detection, a remote explorer with drag & drop, diff and previewed sync, and passwords kept in the OS keychain. Reads your existing .vscode/sftp.json.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "amanazkar",
   "license": "MIT",
   "engines": {
@@ -28,419 +28,419 @@
   "main": "./dist/extension.js",
   "activationEvents": [
     "workspaceContains:.vscode/sftp.json",
-    "onFileSystem:sftp-plus"
+    "onFileSystem:aurex-sftp"
   ],
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "sftpPlus",
-          "title": "SFTP Plus",
+          "id": "aurexSftp",
+          "title": "Aurex SFTP",
           "icon": "media/activity.svg"
         }
       ]
     },
     "views": {
-      "sftpPlus": [
+      "aurexSftp": [
         {
-          "id": "sftpPlus.remoteExplorer",
+          "id": "aurexSftp.remoteExplorer",
           "name": "Servers"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "sftpPlus.remoteExplorer",
-        "contents": "No servers configured for this workspace.\n[Add Server](command:sftpPlus.addServer)\nAlready using another SFTP extension? An existing .vscode/sftp.json is picked up automatically."
+        "view": "aurexSftp.remoteExplorer",
+        "contents": "No servers configured for this workspace.\n[Add Server](command:aurexSftp.addServer)\nAlready using another SFTP extension? An existing .vscode/sftp.json is picked up automatically."
       }
     ],
     "commands": [
       {
-        "command": "sftpPlus.addServer",
+        "command": "aurexSftp.addServer",
         "title": "Add Server\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(add)"
       },
       {
-        "command": "sftpPlus.openConfig",
+        "command": "aurexSftp.openConfig",
         "title": "Open Config (sftp.json)",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(gear)"
       },
       {
-        "command": "sftpPlus.refresh",
+        "command": "aurexSftp.refresh",
         "title": "Refresh",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(refresh)"
       },
       {
-        "command": "sftpPlus.menu",
+        "command": "aurexSftp.menu",
         "title": "Show Actions\u2026",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.testConnection",
+        "command": "aurexSftp.testConnection",
         "title": "Test Connection",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(plug)"
       },
       {
-        "command": "sftpPlus.disconnect",
+        "command": "aurexSftp.disconnect",
         "title": "Disconnect",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(debug-disconnect)"
       },
       {
-        "command": "sftpPlus.disconnectAll",
+        "command": "aurexSftp.disconnectAll",
         "title": "Disconnect All",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.moveSecretsToKeychain",
+        "command": "aurexSftp.moveSecretsToKeychain",
         "title": "Move Passwords from sftp.json to OS Keychain",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.forgetPassword",
+        "command": "aurexSftp.forgetPassword",
         "title": "Forget Saved Password",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.switchProfile",
+        "command": "aurexSftp.switchProfile",
         "title": "Switch Profile\u2026",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.toggleUploadOnSave",
+        "command": "aurexSftp.toggleUploadOnSave",
         "title": "Toggle Upload on Save",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.showLog",
+        "command": "aurexSftp.showLog",
         "title": "Show Log",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.upload",
+        "command": "aurexSftp.upload",
         "title": "Upload to Server",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-upload)"
       },
       {
-        "command": "sftpPlus.download",
+        "command": "aurexSftp.download",
         "title": "Download from Server",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-download)"
       },
       {
-        "command": "sftpPlus.diffWithRemote",
+        "command": "aurexSftp.diffWithRemote",
         "title": "Compare with Server",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(diff)"
       },
       {
-        "command": "sftpPlus.syncToRemote",
+        "command": "aurexSftp.syncToRemote",
         "title": "Sync Local \u2192 Server\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-upload)"
       },
       {
-        "command": "sftpPlus.syncToLocal",
+        "command": "aurexSftp.syncToLocal",
         "title": "Sync Server \u2192 Local\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-download)"
       },
       {
-        "command": "sftpPlus.remote.download",
+        "command": "aurexSftp.remote.download",
         "title": "Download",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-download)"
       },
       {
-        "command": "sftpPlus.remote.uploadHere",
+        "command": "aurexSftp.remote.uploadHere",
         "title": "Upload Files Here\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(cloud-upload)"
       },
       {
-        "command": "sftpPlus.remote.newFile",
+        "command": "aurexSftp.remote.newFile",
         "title": "New File\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(new-file)"
       },
       {
-        "command": "sftpPlus.remote.newFolder",
+        "command": "aurexSftp.remote.newFolder",
         "title": "New Folder\u2026",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(new-folder)"
       },
       {
-        "command": "sftpPlus.remote.rename",
+        "command": "aurexSftp.remote.rename",
         "title": "Rename\u2026",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.remote.delete",
+        "command": "aurexSftp.remote.delete",
         "title": "Delete",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.remote.chmod",
+        "command": "aurexSftp.remote.chmod",
         "title": "Change Permissions\u2026",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.remote.copyPath",
+        "command": "aurexSftp.remote.copyPath",
         "title": "Copy Remote Path",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.remote.diffWithLocal",
+        "command": "aurexSftp.remote.diffWithLocal",
         "title": "Compare with Local",
-        "category": "SFTP Plus"
+        "category": "Aurex SFTP"
       },
       {
-        "command": "sftpPlus.remote.refresh",
+        "command": "aurexSftp.remote.refresh",
         "title": "Refresh",
-        "category": "SFTP Plus",
+        "category": "Aurex SFTP",
         "icon": "$(refresh)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "sftpPlus.addServer",
-          "when": "view == sftpPlus.remoteExplorer",
+          "command": "aurexSftp.addServer",
+          "when": "view == aurexSftp.remoteExplorer",
           "group": "navigation@1"
         },
         {
-          "command": "sftpPlus.refresh",
-          "when": "view == sftpPlus.remoteExplorer",
+          "command": "aurexSftp.refresh",
+          "when": "view == aurexSftp.remoteExplorer",
           "group": "navigation@2"
         },
         {
-          "command": "sftpPlus.openConfig",
-          "when": "view == sftpPlus.remoteExplorer",
+          "command": "aurexSftp.openConfig",
+          "when": "view == aurexSftp.remoteExplorer",
           "group": "navigation@3"
         }
       ],
       "view/item/context": [
         {
-          "command": "sftpPlus.remote.refresh",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.remote.refresh",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "inline@3"
         },
         {
-          "command": "sftpPlus.remote.uploadHere",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.remote.uploadHere",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "inline@2"
         },
         {
-          "command": "sftpPlus.testConnection",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^profile/",
+          "command": "aurexSftp.testConnection",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^profile/",
           "group": "0_conn@1"
         },
         {
-          "command": "sftpPlus.disconnect",
-          "when": "view == sftpPlus.remoteExplorer && viewItem == profile-connected",
+          "command": "aurexSftp.disconnect",
+          "when": "view == aurexSftp.remoteExplorer && viewItem == profile-connected",
           "group": "0_conn@2"
         },
         {
-          "command": "sftpPlus.switchProfile",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^profile/",
+          "command": "aurexSftp.switchProfile",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^profile/",
           "group": "0_conn@3"
         },
         {
-          "command": "sftpPlus.syncToRemote",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.syncToRemote",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "1_sync@1"
         },
         {
-          "command": "sftpPlus.syncToLocal",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.syncToLocal",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "1_sync@2"
         },
         {
-          "command": "sftpPlus.remote.newFile",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.remote.newFile",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "2_new@1"
         },
         {
-          "command": "sftpPlus.remote.newFolder",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.remote.newFolder",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "2_new@2"
         },
         {
-          "command": "sftpPlus.remote.uploadHere",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "command": "aurexSftp.remote.uploadHere",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(profile|dir)/",
           "group": "3_transfer@1"
         },
         {
-          "command": "sftpPlus.remote.download",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "command": "aurexSftp.remote.download",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(file|dir)$/",
           "group": "3_transfer@2"
         },
         {
-          "command": "sftpPlus.remote.diffWithLocal",
-          "when": "view == sftpPlus.remoteExplorer && viewItem == file",
+          "command": "aurexSftp.remote.diffWithLocal",
+          "when": "view == aurexSftp.remoteExplorer && viewItem == file",
           "group": "3_transfer@3"
         },
         {
-          "command": "sftpPlus.remote.rename",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "command": "aurexSftp.remote.rename",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(file|dir)$/",
           "group": "4_edit@1"
         },
         {
-          "command": "sftpPlus.remote.delete",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "command": "aurexSftp.remote.delete",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(file|dir)$/",
           "group": "4_edit@2"
         },
         {
-          "command": "sftpPlus.remote.chmod",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "command": "aurexSftp.remote.chmod",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(file|dir)$/",
           "group": "4_edit@3"
         },
         {
-          "command": "sftpPlus.remote.copyPath",
-          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "command": "aurexSftp.remote.copyPath",
+          "when": "view == aurexSftp.remoteExplorer && viewItem =~ /^(file|dir)$/",
           "group": "5_copy@1"
         }
       ],
       "explorer/context": [
         {
-          "command": "sftpPlus.upload",
-          "when": "sftpPlus.hasConfig",
-          "group": "sftpPlus@1"
+          "command": "aurexSftp.upload",
+          "when": "aurexSftp.hasConfig",
+          "group": "aurexSftp@1"
         },
         {
-          "command": "sftpPlus.download",
-          "when": "sftpPlus.hasConfig",
-          "group": "sftpPlus@2"
+          "command": "aurexSftp.download",
+          "when": "aurexSftp.hasConfig",
+          "group": "aurexSftp@2"
         },
         {
-          "command": "sftpPlus.diffWithRemote",
-          "when": "sftpPlus.hasConfig && !explorerResourceIsFolder",
-          "group": "sftpPlus@3"
+          "command": "aurexSftp.diffWithRemote",
+          "when": "aurexSftp.hasConfig && !explorerResourceIsFolder",
+          "group": "aurexSftp@3"
         },
         {
-          "command": "sftpPlus.syncToRemote",
-          "when": "sftpPlus.hasConfig && explorerResourceIsFolder",
-          "group": "sftpPlus@4"
+          "command": "aurexSftp.syncToRemote",
+          "when": "aurexSftp.hasConfig && explorerResourceIsFolder",
+          "group": "aurexSftp@4"
         },
         {
-          "command": "sftpPlus.syncToLocal",
-          "when": "sftpPlus.hasConfig && explorerResourceIsFolder",
-          "group": "sftpPlus@5"
+          "command": "aurexSftp.syncToLocal",
+          "when": "aurexSftp.hasConfig && explorerResourceIsFolder",
+          "group": "aurexSftp@5"
         }
       ],
       "editor/title/context": [
         {
-          "command": "sftpPlus.upload",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@1"
+          "command": "aurexSftp.upload",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@1"
         },
         {
-          "command": "sftpPlus.download",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@2"
+          "command": "aurexSftp.download",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@2"
         },
         {
-          "command": "sftpPlus.diffWithRemote",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@3"
+          "command": "aurexSftp.diffWithRemote",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@3"
         }
       ],
       "editor/context": [
         {
-          "command": "sftpPlus.upload",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@1"
+          "command": "aurexSftp.upload",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@1"
         },
         {
-          "command": "sftpPlus.download",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@2"
+          "command": "aurexSftp.download",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@2"
         },
         {
-          "command": "sftpPlus.diffWithRemote",
-          "when": "sftpPlus.hasConfig && resourceScheme == file",
-          "group": "sftpPlus@3"
+          "command": "aurexSftp.diffWithRemote",
+          "when": "aurexSftp.hasConfig && resourceScheme == file",
+          "group": "aurexSftp@3"
         }
       ],
       "commandPalette": [
         {
-          "command": "sftpPlus.remote.download",
+          "command": "aurexSftp.remote.download",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.uploadHere",
+          "command": "aurexSftp.remote.uploadHere",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.newFile",
+          "command": "aurexSftp.remote.newFile",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.newFolder",
+          "command": "aurexSftp.remote.newFolder",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.rename",
+          "command": "aurexSftp.remote.rename",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.delete",
+          "command": "aurexSftp.remote.delete",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.chmod",
+          "command": "aurexSftp.remote.chmod",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.copyPath",
+          "command": "aurexSftp.remote.copyPath",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.diffWithLocal",
+          "command": "aurexSftp.remote.diffWithLocal",
           "when": "false"
         },
         {
-          "command": "sftpPlus.remote.refresh",
+          "command": "aurexSftp.remote.refresh",
           "when": "false"
         }
       ]
     },
     "configuration": {
-      "title": "SFTP Plus",
+      "title": "Aurex SFTP",
       "properties": {
-        "sftpPlus.conflictDetection": {
+        "aurexSftp.conflictDetection": {
           "type": "boolean",
           "default": true,
           "description": "Before uploading on save, check whether the server copy changed since you last synced it, and ask before overwriting."
         },
-        "sftpPlus.checkOnOpen": {
+        "aurexSftp.checkOnOpen": {
           "type": "boolean",
           "default": true,
           "description": "When you open a file, compare it with the server copy so you never edit an outdated file."
         },
-        "sftpPlus.downloadOnOpen": {
+        "aurexSftp.downloadOnOpen": {
           "type": "boolean",
           "default": true,
           "description": "When an opened file differs from the server, load the server version automatically. If your local copy has changes the server doesn't, you're asked instead. A server's \"downloadOnOpen\" in sftp.json overrides this."
         },
-        "sftpPlus.retries": {
+        "aurexSftp.retries": {
           "type": "number",
           "default": 2,
           "minimum": 0,
           "description": "How many times to reconnect and retry an operation after the connection drops."
         },
-        "sftpPlus.idleDisconnectSeconds": {
+        "aurexSftp.idleDisconnectSeconds": {
           "type": "number",
           "default": 300,
           "minimum": 0,
           "description": "Close idle connections after this many seconds (0 keeps them open)."
         },
-        "sftpPlus.showUploadNotifications": {
+        "aurexSftp.showUploadNotifications": {
           "type": "boolean",
           "default": false,
           "description": "Show a notification after each successful upload (the status bar always shows it)."
@@ -477,10 +477,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AAzkar/vscode-sftp-plus.git"
+    "url": "https://github.com/AAzkar/aurex-sftp.git"
   },
   "bugs": {
-    "url": "https://github.com/AAzkar/vscode-sftp-plus/issues"
+    "url": "https://github.com/AAzkar/aurex-sftp/issues"
   },
-  "homepage": "https://github.com/AAzkar/vscode-sftp-plus#readme"
+  "homepage": "https://github.com/AAzkar/aurex-sftp#readme"
 }

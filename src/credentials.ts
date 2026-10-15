@@ -5,14 +5,14 @@ import { Profile } from './config';
 type Target = Pick<Profile, 'protocol' | 'username' | 'host' | 'port'>;
 type SecretKind = 'password' | 'passphrase';
 
-const HOST_KEYS = 'sftpPlus.hostKeys';
+const HOST_KEYS = 'aurexSftp.hostKeys';
 
 /** Passwords live in VS Code SecretStorage (the OS keychain); trusted SSH host keys in global state. */
 export class Credentials {
   constructor(private readonly ctx: vscode.ExtensionContext) {}
 
   static key(t: Target, kind: SecretKind = 'password'): string {
-    return `sftpPlus:${kind}:${t.protocol}://${t.username}@${t.host}:${t.port}`;
+    return `aurexSftp:${kind}:${t.protocol}://${t.username}@${t.host}:${t.port}`;
   }
 
   store(t: Target, value: string, kind: SecretKind = 'password'): Thenable<void> {
@@ -39,7 +39,7 @@ export class Credentials {
     const saved = await this.ctx.secrets.get(Credentials.key(p, kind));
     if (saved !== undefined) return saved;
     const value = await vscode.window.showInputBox({
-      title: `SFTP Plus: ${p.name}`,
+      title: `Aurex SFTP: ${p.name}`,
       prompt,
       password: true,
       ignoreFocusOut: true,

@@ -13,7 +13,7 @@ export interface Baseline {
   localMtime?: number;
 }
 
-const BASELINES = 'sftpPlus.baselines';
+const BASELINES = 'aurexSftp.baselines';
 
 export class Baselines {
   private data: Record<string, Baseline>;
@@ -68,7 +68,7 @@ export class StatusBar implements vscode.Disposable {
   private flashTimer?: NodeJS.Timeout;
 
   constructor() {
-    this.item.command = 'sftpPlus.menu';
+    this.item.command = 'aurexSftp.menu';
     this.render();
   }
 
@@ -125,11 +125,11 @@ export class StatusBar implements vscode.Disposable {
       this.item.backgroundColor = undefined;
     } else if (this.flash) {
       this.item.text = `${this.flash.error ? '$(error)' : '$(check)'} ${this.flash.text}`;
-      this.item.tooltip = this.flash.error ? 'Click for SFTP Plus actions and the log' : undefined;
+      this.item.tooltip = this.flash.error ? 'Click for Aurex SFTP actions and the log' : undefined;
       this.item.backgroundColor = this.flash.error ? new vscode.ThemeColor('statusBarItem.errorBackground') : undefined;
     } else {
       this.item.text = '$(cloud) SFTP';
-      this.item.tooltip = 'SFTP Plus: click for actions';
+      this.item.tooltip = 'Aurex SFTP: click for actions';
       this.item.backgroundColor = undefined;
     }
   }

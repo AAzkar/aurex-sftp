@@ -1,9 +1,13 @@
 # Changelog
 
+## 0.4.0
+
+- Renamed to Aurex SFTP (`amanazkar.aurex-sftp`). Commands and settings are now `aurexSftp.*`.
+
 ## 0.3.0
 
-- Download on open is now on by default (`sftpPlus.downloadOnOpen`). It asks instead when the local copy has changes the server doesn't.
-- Publisher is now Aman Azkar (`amanazkar.sftp-plus`).
+- Download on open is now on by default (`aurexSftp.downloadOnOpen`). It asks instead when the local copy has changes the server doesn't.
+- Publisher is now Aman Azkar (`amanazkar.aurex-sftp`).
 
 ## 0.2.0
 

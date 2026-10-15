@@ -33,7 +33,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
         try {
           await fn(...args);
         } catch (err) {
-          await s.reportError(`SFTP Plus`, err);
+          await s.reportError(`Aurex SFTP`, err);
         }
       }),
     );
@@ -69,7 +69,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
 
   // ── Local file commands ───────────────────────────────────────────────────────
 
-  register('sftpPlus.upload', async (uri?: vscode.Uri, all?: vscode.Uri[]) => {
+  register('aurexSftp.upload', async (uri?: vscode.Uri, all?: vscode.Uri[]) => {
     const targets = localTargets(uri, all);
     if (!targets.length) return;
     const p = await profileFor(targets[0], 'Upload to which server?');
@@ -80,7 +80,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     s.status.clearError();
   });
 
-  register('sftpPlus.download', async (uri?: vscode.Uri, all?: vscode.Uri[]) => {
+  register('aurexSftp.download', async (uri?: vscode.Uri, all?: vscode.Uri[]) => {
     const targets = localTargets(uri, all);
     if (!targets.length) return;
     const p = await profileFor(targets[0], 'Download from which server?');
@@ -89,7 +89,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     await downloadPaths(s, p, targets.map((t) => posix.join(root, relativeLocal(p, t) ?? '')));
   });
 
-  register('sftpPlus.diffWithRemote', async (uri?: vscode.Uri) => {
+  register('aurexSftp.diffWithRemote', async (uri?: vscode.Uri) => {
     const [target] = localTargets(uri);
     if (!target) return;
     const p = await profileFor(target, 'Compare with which server?');
@@ -115,18 +115,18 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     }
     if (p && localDir) await syncFolder(s, p, localDir, direction);
   };
-  register('sftpPlus.syncToRemote', sync('up'));
-  register('sftpPlus.syncToLocal', sync('down'));
+  register('aurexSftp.syncToRemote', sync('up'));
+  register('aurexSftp.syncToLocal', sync('down'));
 
   // ── Remote explorer commands ──────────────────────────────────────────────────
 
   const selected = (node: Node | undefined, all?: Node[]): EntryNode[] =>
     (all?.length ? all : node ? [node] : explorer.view.selection).filter((n): n is EntryNode => n.type === 'entry');
 
-  register('sftpPlus.refresh', () => explorer.refresh());
-  register('sftpPlus.remote.refresh', (node?: Node) => explorer.refresh(node));
+  register('aurexSftp.refresh', () => explorer.refresh());
+  register('aurexSftp.remote.refresh', (node?: Node) => explorer.refresh(node));
 
-  register('sftpPlus.remote.download', async (node?: Node, all?: Node[]) => {
+  register('aurexSftp.remote.download', async (node?: Node, all?: Node[]) => {
     const nodes = selected(node, all);
     if (!nodes.length) return;
     const p = nodes[0].profile;
@@ -145,7 +145,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     await downloadPaths(s, p, nodes.map((n) => n.entry.path), target);
   });
 
-  register('sftpPlus.remote.uploadHere', async (node?: ProfileNode | EntryNode) => {
+  register('aurexSftp.remote.uploadHere', async (node?: ProfileNode | EntryNode) => {
     const p = await profileOf(node);
     if (!p) return;
     const dir = node ? await explorer.dirOf(node) : await s.conns.get(p).root();
@@ -177,10 +177,10 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
       await vscode.window.showTextDocument(uri);
     }
   };
-  register('sftpPlus.remote.newFile', newItem('file'));
-  register('sftpPlus.remote.newFolder', newItem('folder'));
+  register('aurexSftp.remote.newFile', newItem('file'));
+  register('aurexSftp.remote.newFolder', newItem('folder'));
 
-  register('sftpPlus.remote.rename', async (node?: EntryNode) => {
+  register('aurexSftp.remote.rename', async (node?: EntryNode) => {
     const [n] = selected(node);
     if (!n) return;
     const name = await vscode.window.showInputBox({
@@ -194,7 +194,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     await vscode.workspace.fs.rename(remoteUri(n.profile, n.entry.path), remoteUri(n.profile, to), { overwrite: false });
   });
 
-  register('sftpPlus.remote.delete', async (node?: Node, all?: Node[]) => {
+  register('aurexSftp.remote.delete', async (node?: Node, all?: Node[]) => {
     const nodes = selected(node, all);
     if (!nodes.length) return;
     const p = nodes[0].profile;
@@ -209,7 +209,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     s.notifyRemoteChanged(p);
   });
 
-  register('sftpPlus.remote.chmod', async (node?: EntryNode, all?: Node[]) => {
+  register('aurexSftp.remote.chmod', async (node?: EntryNode, all?: Node[]) => {
     const nodes = selected(node, all);
     if (!nodes.length) return;
     const current = nodes[0].entry.mode;
@@ -227,11 +227,11 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     s.notifyRemoteChanged(p);
   });
 
-  register('sftpPlus.remote.copyPath', async (node?: Node, all?: Node[]) => {
+  register('aurexSftp.remote.copyPath', async (node?: Node, all?: Node[]) => {
     await vscode.env.clipboard.writeText(selected(node, all).map((n) => n.entry.path).join('\n'));
   });
 
-  register('sftpPlus.remote.diffWithLocal', async (node?: EntryNode) => {
+  register('aurexSftp.remote.diffWithLocal', async (node?: EntryNode) => {
     const [n] = selected(node);
     if (!n) return;
     const local = localFor(n.profile, await s.conns.get(n.profile).root(), n.entry.path);
@@ -244,7 +244,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
 
   // ── Connection & config commands ──────────────────────────────────────────────
 
-  register('sftpPlus.testConnection', async (node?: Node) => {
+  register('aurexSftp.testConnection', async (node?: Node) => {
     const p = await profileOf(node);
     if (!p) return;
     const started = Date.now();
@@ -255,27 +255,27 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     explorer.refresh();
   });
 
-  register('sftpPlus.disconnect', async (node?: Node) => {
+  register('aurexSftp.disconnect', async (node?: Node) => {
     const p = await profileOf(node);
     if (p) s.conns.get(p).disconnect();
   });
-  register('sftpPlus.disconnectAll', () => s.conns.disconnectAll());
-  register('sftpPlus.showLog', () => log.show());
+  register('aurexSftp.disconnectAll', () => s.conns.disconnectAll());
+  register('aurexSftp.showLog', () => log.show());
 
-  register('sftpPlus.openConfig', async () => {
+  register('aurexSftp.openConfig', async () => {
     const folder = await pickFolder();
     if (!folder) return;
     const uri = config.configUriFor(folder);
     if (!fs.existsSync(uri.fsPath)) {
-      await vscode.commands.executeCommand('sftpPlus.addServer');
+      await vscode.commands.executeCommand('aurexSftp.addServer');
       return;
     }
     await vscode.window.showTextDocument(uri);
   });
 
-  register('sftpPlus.addServer', () => addServerWizard(config, s.creds));
+  register('aurexSftp.addServer', () => addServerWizard(config, s.creds));
 
-  register('sftpPlus.switchProfile', async (node?: Node) => {
+  register('aurexSftp.switchProfile', async (node?: Node) => {
     const candidates = config.profiles.filter((p) => p.subProfiles.length);
     const p = node && node.type !== 'message' ? node.profile : await pickProfile(candidates, 'Switch profile for which server?');
     if (!p) return;
@@ -290,14 +290,14 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     if (pick) await config.setActiveSubProfile(p, pick.label);
   });
 
-  register('sftpPlus.toggleUploadOnSave', async (node?: Node) => {
+  register('aurexSftp.toggleUploadOnSave', async (node?: Node) => {
     const p = await profileOf(node);
     if (!p) return;
     await config.updateFile(p.configUri, (text) => config.setProperty(text, p.index, ['uploadOnSave'], !p.uploadOnSave));
     void vscode.window.showInformationMessage(`Upload on save is now ${p.uploadOnSave ? 'off' : 'on'} for ${p.name}.`);
   });
 
-  register('sftpPlus.forgetPassword', async (node?: Node) => {
+  register('aurexSftp.forgetPassword', async (node?: Node) => {
     const p = await profileOf(node);
     if (!p) return;
     await s.creds.forget(p);
@@ -305,37 +305,37 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     void vscode.window.showInformationMessage(`Forgot the saved password for ${p.name}.`);
   });
 
-  register('sftpPlus.moveSecretsToKeychain', () => moveSecretsToKeychain(config, s.creds));
+  register('aurexSftp.moveSecretsToKeychain', () => moveSecretsToKeychain(config, s.creds));
 
-  register('sftpPlus.menu', async () => {
+  register('aurexSftp.menu', async () => {
     s.status.clearError();
     const editor = vscode.window.activeTextEditor?.document.uri;
     const inMapping = editor?.scheme === 'file' && config.forPath(editor.fsPath).length > 0;
     const actions: { label: string; command: string; args?: unknown[] }[] = [
       ...(inMapping
         ? [
-            { label: '$(cloud-upload) Upload current file', command: 'sftpPlus.upload' },
-            { label: '$(cloud-download) Download current file', command: 'sftpPlus.download' },
-            { label: '$(diff) Compare current file with server', command: 'sftpPlus.diffWithRemote' },
+            { label: '$(cloud-upload) Upload current file', command: 'aurexSftp.upload' },
+            { label: '$(cloud-download) Download current file', command: 'aurexSftp.download' },
+            { label: '$(diff) Compare current file with server', command: 'aurexSftp.diffWithRemote' },
           ]
         : []),
-      { label: '$(arrow-up) Sync local → server…', command: 'sftpPlus.syncToRemote' },
-      { label: '$(arrow-down) Sync server → local…', command: 'sftpPlus.syncToLocal' },
-      { label: '$(remote-explorer) Open Servers view', command: 'sftpPlus.remoteExplorer.focus' },
-      { label: '$(save) Toggle upload on save…', command: 'sftpPlus.toggleUploadOnSave' },
-      { label: '$(arrow-swap) Switch profile…', command: 'sftpPlus.switchProfile' },
-      { label: '$(plug) Test connection…', command: 'sftpPlus.testConnection' },
-      { label: '$(debug-disconnect) Disconnect all', command: 'sftpPlus.disconnectAll' },
-      { label: '$(gear) Open sftp.json', command: 'sftpPlus.openConfig' },
-      { label: '$(output) Show log', command: 'sftpPlus.showLog' },
+      { label: '$(arrow-up) Sync local → server…', command: 'aurexSftp.syncToRemote' },
+      { label: '$(arrow-down) Sync server → local…', command: 'aurexSftp.syncToLocal' },
+      { label: '$(remote-explorer) Open Servers view', command: 'aurexSftp.remoteExplorer.focus' },
+      { label: '$(save) Toggle upload on save…', command: 'aurexSftp.toggleUploadOnSave' },
+      { label: '$(arrow-swap) Switch profile…', command: 'aurexSftp.switchProfile' },
+      { label: '$(plug) Test connection…', command: 'aurexSftp.testConnection' },
+      { label: '$(debug-disconnect) Disconnect all', command: 'aurexSftp.disconnectAll' },
+      { label: '$(gear) Open sftp.json', command: 'aurexSftp.openConfig' },
+      { label: '$(output) Show log', command: 'aurexSftp.showLog' },
     ];
-    const pick = await vscode.window.showQuickPick(actions, { placeHolder: 'SFTP Plus' });
+    const pick = await vscode.window.showQuickPick(actions, { placeHolder: 'Aurex SFTP' });
     if (pick) await vscode.commands.executeCommand(pick.command, ...(pick.args ?? []));
   });
 
   await config.reload();
   void suggestMigration(ctx, config);
-  log.info('SFTP Plus activated');
+  log.info('Aurex SFTP activated');
 }
 
 export function deactivate(): void {
@@ -432,7 +432,7 @@ async function addServerWizard(config: ConfigStore, creds: Credentials): Promise
   await config.updateFile(uri, (text) => config.appendEntry(text, entry));
   const added = config.profiles.filter((p) => p.configUri.fsPath === uri.fsPath).at(-1);
   const choice = await vscode.window.showInformationMessage(`Added ${entry.name} to .vscode/sftp.json.`, 'Test Connection', 'Open sftp.json');
-  if (choice === 'Test Connection' && added) await vscode.commands.executeCommand('sftpPlus.testConnection', { type: 'profile', profile: added });
+  if (choice === 'Test Connection' && added) await vscode.commands.executeCommand('aurexSftp.testConnection', { type: 'profile', profile: added });
   if (choice === 'Open sftp.json') await vscode.window.showTextDocument(uri);
 }
 
@@ -479,22 +479,22 @@ async function moveSecretsToKeychain(config: ConfigStore, creds: Credentials): P
 async function suggestMigration(ctx: vscode.ExtensionContext, config: ConfigStore): Promise<void> {
   if (!config.profiles.length) return;
   const others = ['natizyskunk.sftp', 'liximomo.sftp', 'humy2833.ftp-simple', 'ontime.ftp-sync'].filter((id) => vscode.extensions.getExtension(id));
-  if (others.length && !ctx.workspaceState.get('sftpPlus.warnedOthers')) {
-    await ctx.workspaceState.update('sftpPlus.warnedOthers', true);
+  if (others.length && !ctx.workspaceState.get('aurexSftp.warnedOthers')) {
+    await ctx.workspaceState.update('aurexSftp.warnedOthers', true);
     const pick = await vscode.window.showInformationMessage(
-      `SFTP Plus is using this workspace's sftp.json. Other FTP extensions are also enabled (${others.join(', ')}); if they upload on save too, every save is uploaded twice. Disable them for this workspace?`,
+      `Aurex SFTP is using this workspace's sftp.json. Other FTP extensions are also enabled (${others.join(', ')}); if they upload on save too, every save is uploaded twice. Disable them for this workspace?`,
       'Show Extensions',
     );
     if (pick) await vscode.commands.executeCommand('workbench.extensions.search', others.map((id) => `@id:${id}`).join(' '));
   }
   const plain = config.profiles.filter((p) => p.password !== undefined || typeof p.passphrase === 'string');
-  if (plain.length && !ctx.workspaceState.get('sftpPlus.warnedPlaintext')) {
-    await ctx.workspaceState.update('sftpPlus.warnedPlaintext', true);
+  if (plain.length && !ctx.workspaceState.get('aurexSftp.warnedPlaintext')) {
+    await ctx.workspaceState.update('aurexSftp.warnedPlaintext', true);
     const pick = await vscode.window.showWarningMessage(
       `sftp.json stores ${plain.length === 1 ? 'a password' : `${plain.length} passwords`} in plain text. Move ${plain.length === 1 ? 'it' : 'them'} to your OS keychain?`,
       'Move to Keychain',
       'Not Now',
     );
-    if (pick === 'Move to Keychain') await vscode.commands.executeCommand('sftpPlus.moveSecretsToKeychain');
+    if (pick === 'Move to Keychain') await vscode.commands.executeCommand('aurexSftp.moveSecretsToKeychain');
   }
 }

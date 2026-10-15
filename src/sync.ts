@@ -64,7 +64,7 @@ export class AutoUploader implements vscode.Disposable {
       const result = await uploadFile(this.s, p, file, { checkConflict: true });
       if (result === 'uploaded') {
         status.ok(`${name} uploaded to ${p.name}`);
-        if (vscode.workspace.getConfiguration('sftpPlus').get<boolean>('showUploadNotifications')) {
+        if (vscode.workspace.getConfiguration('aurexSftp').get<boolean>('showUploadNotifications')) {
           void vscode.window.showInformationMessage(`Uploaded ${name} to ${p.name}`);
         }
       } else status.ok(result === 'downloaded' ? `${name} replaced with server version` : `${name} not uploaded`);
@@ -101,7 +101,7 @@ export class OpenChecker implements vscode.Disposable {
   }
 
   private async check(doc: vscode.TextDocument): Promise<void> {
-    if (doc.uri.scheme !== 'file' || !vscode.workspace.getConfiguration('sftpPlus').get<boolean>('checkOnOpen', true)) return;
+    if (doc.uri.scheme !== 'file' || !vscode.workspace.getConfiguration('aurexSftp').get<boolean>('checkOnOpen', true)) return;
     const local = doc.uri.fsPath;
     const p = this.s.config.forPath(local)[0];
     if (!p) return;
@@ -138,7 +138,7 @@ export class OpenChecker implements vscode.Disposable {
         base?.localMtime !== undefined
           ? Math.abs(localStat.mtimeMs - base.localMtime) > 1000
           : !remote.mtime || localStat.mtimeMs > remote.mtime + 1000;
-      const auto = p.downloadOnOpen ?? vscode.workspace.getConfiguration('sftpPlus').get<boolean>('downloadOnOpen', true);
+      const auto = p.downloadOnOpen ?? vscode.workspace.getConfiguration('aurexSftp').get<boolean>('downloadOnOpen', true);
       if (auto && localModified) result.reason += ', and your local copy has changes of its own';
       if (auto && !localModified && !doc.isDirty) {
         await downloadFile(this.s, p, remotePath, local);
@@ -229,7 +229,7 @@ async function plan(s: Services, p: Profile, localDir: string, direction: 'up' |
       }
       continue;
     }
-    // No baseline: we have never synced this file through SFTP Plus.
+    // No baseline: we have never synced this file through Aurex SFTP.
     if (local.size !== r.size) {
       add(rel, direction === 'up' ? 'upload' : 'download', `Different size (local ${formatBytes(local.size)}, server ${formatBytes(r.size)})`, true, local, r);
     } else if (r.mtime && Math.abs(local.mtime - r.mtime) > 2000) {

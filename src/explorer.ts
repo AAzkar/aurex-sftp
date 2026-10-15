@@ -28,7 +28,7 @@ interface MessageNode {
   parent: ProfileNode | EntryNode;
 }
 
-const TREE_MIME = 'application/vnd.code.tree.sftpplus.remoteexplorer';
+const TREE_MIME = 'application/vnd.code.tree.aurexsftp.remoteexplorer';
 
 export class RemoteExplorer implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node>, vscode.Disposable {
   readonly dropMimeTypes = [TREE_MIME, 'text/uri-list'];
@@ -42,7 +42,7 @@ export class RemoteExplorer implements vscode.TreeDataProvider<Node>, vscode.Tre
   readonly view: vscode.TreeView<Node>;
 
   constructor(private readonly s: Services) {
-    this.view = vscode.window.createTreeView('sftpPlus.remoteExplorer', {
+    this.view = vscode.window.createTreeView('aurexSftp.remoteExplorer', {
       treeDataProvider: this,
       dragAndDropController: this,
       canSelectMany: true,
@@ -76,7 +76,7 @@ export class RemoteExplorer implements vscode.TreeDataProvider<Node>, vscode.Tre
       const item = new vscode.TreeItem(node.text);
       item.iconPath = new vscode.ThemeIcon('warning', new vscode.ThemeColor('problemsWarningIcon.foreground'));
       item.tooltip = 'Click to retry';
-      item.command = { command: 'sftpPlus.remote.refresh', title: 'Retry', arguments: [node.parent] };
+      item.command = { command: 'aurexSftp.remote.refresh', title: 'Retry', arguments: [node.parent] };
       return item;
     }
     if (node.type === 'profile') {

@@ -70,7 +70,7 @@ export class Connection implements vscode.Disposable {
       this.active++;
       clearTimeout(this.idleTimer);
       try {
-        const retries = vscode.workspace.getConfiguration('sftpPlus').get<number>('retries', 2);
+        const retries = vscode.workspace.getConfiguration('aurexSftp').get<number>('retries', 2);
         for (let attempt = 0; ; attempt++) {
           const client = await this.ensure();
           try {
@@ -139,7 +139,7 @@ export class Connection implements vscode.Disposable {
   }
 
   private scheduleIdle() {
-    const seconds = vscode.workspace.getConfiguration('sftpPlus').get<number>('idleDisconnectSeconds', 300);
+    const seconds = vscode.workspace.getConfiguration('aurexSftp').get<number>('idleDisconnectSeconds', 300);
     if (!seconds || this.active > 0) return;
     this.idleTimer = setTimeout(() => {
       if (this.active === 0 && this.client) {

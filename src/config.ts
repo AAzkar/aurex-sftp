@@ -11,7 +11,7 @@ export type Protocol = 'sftp' | 'ftp';
 
 /** One server entry, after merging the active sub-profile and filling in defaults. */
 export interface Profile {
-  /** Stable, URI-safe id (used as the authority of sftp-plus:// URIs). */
+  /** Stable, URI-safe id (used as the authority of aurex-sftp:// URIs). */
   id: string;
   name: string;
   folder: vscode.WorkspaceFolder;
@@ -33,7 +33,7 @@ export interface Profile {
   uploadOnSave: boolean;
   useTempFile: boolean;
   /** Replace the local copy automatically when the server version differs on open. */
-  /** undefined = follow the sftpPlus.downloadOnOpen setting. */
+  /** undefined = follow the aurexSftp.downloadOnOpen setting. */
   downloadOnOpen?: boolean;
   secure: boolean | 'implicit';
   rejectUnauthorized: boolean;
@@ -160,7 +160,7 @@ export class ConfigStore implements vscode.Disposable {
       if (errors.length || typeof data !== 'object' || data === null) {
         const detail = errors.map((e) => `${printParseErrorCode(e.error)} at offset ${e.offset}`).join(', ');
         log.error(`Could not parse ${uri.fsPath}: ${detail || 'expected an object or array'}`);
-        void vscode.window.showWarningMessage(`SFTP Plus: ${path.relative(folder.uri.fsPath, uri.fsPath)} has a syntax error (${detail}).`);
+        void vscode.window.showWarningMessage(`Aurex SFTP: ${path.relative(folder.uri.fsPath, uri.fsPath)} has a syntax error (${detail}).`);
         continue;
       }
       this.raw.set(uri.fsPath, { text, data });
@@ -175,13 +175,13 @@ export class ConfigStore implements vscode.Disposable {
       });
     }
     this.list = profiles;
-    await vscode.commands.executeCommand('setContext', 'sftpPlus.hasConfig', profiles.length > 0);
+    await vscode.commands.executeCommand('setContext', 'aurexSftp.hasConfig', profiles.length > 0);
     log.info(`Loaded ${profiles.length} server profile(s)`);
     this.emitter.fire();
   }
 
   private subKey(configUri: vscode.Uri, index: number) {
-    return `sftpPlus.activeProfile:${configUri.fsPath}#${index}`;
+    return `aurexSftp.activeProfile:${configUri.fsPath}#${index}`;
   }
 
   async setActiveSubProfile(p: Profile, name: string): Promise<void> {

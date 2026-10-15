@@ -22,7 +22,7 @@ export interface LocalFile {
  * connections in a bad state, so it's better not to provoke one.
  */
 async function put(c: RemoteClient, local: string, remote: string, useTempFile: boolean, newFile: boolean): Promise<void> {
-  const target = useTempFile ? posix.join(posix.dirname(remote), `.${posix.basename(remote)}.sftp-plus.tmp`) : remote;
+  const target = useTempFile ? posix.join(posix.dirname(remote), `.${posix.basename(remote)}.aurex-sftp.tmp`) : remote;
   if (newFile) await c.mkdirp(posix.dirname(remote));
   try {
     await c.uploadFile(local, target);
@@ -45,7 +45,7 @@ async function put(c: RemoteClient, local: string, remote: string, useTempFile: 
 /** Downloads to a temp file first so a failed transfer never leaves a truncated local file behind. */
 async function get(c: RemoteClient, remote: string, local: string): Promise<void> {
   await fs.promises.mkdir(path.dirname(local), { recursive: true });
-  const temp = `${local}.sftp-plus-download`;
+  const temp = `${local}.aurex-sftp-download`;
   try {
     await c.downloadFile(remote, temp);
     await fs.promises.rename(temp, local);
@@ -71,7 +71,7 @@ export async function uploadFile(s: Services, p: Profile, local: string, opts: {
   const conn = s.conns.get(p);
   const localStat = await fs.promises.stat(local);
 
-  if (opts.checkConflict && vscode.workspace.getConfiguration('sftpPlus').get<boolean>('conflictDetection', true)) {
+  if (opts.checkConflict && vscode.workspace.getConfiguration('aurexSftp').get<boolean>('conflictDetection', true)) {
     const [remotePath, remote] = await conn.run(async (c, root) => {
       const rp = remoteJoin(root, rel);
       return [rp, await c.stat(rp)] as const;
