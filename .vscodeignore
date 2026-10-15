@@ -1,0 +1,11 @@
+src/**
+test/**
+out/**
+node_modules/**
+dist/test/**
+**/*.map
+tsconfig.json
+esbuild.mjs
+.gitignore
+.vscode-test/**
+media/logo.svg

@@ -1,0 +1,486 @@
+{
+  "name": "sftp-plus",
+  "displayName": "SFTP Plus",
+  "description": "Reliable SFTP / FTP / FTPS deploys: upload on save with conflict detection, a remote explorer with drag & drop, diff and previewed sync, and passwords kept in the OS keychain. Reads your existing .vscode/sftp.json.",
+  "version": "0.3.0",
+  "publisher": "amanazkar",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "sftp",
+    "ftp",
+    "ftps",
+    "deploy",
+    "upload",
+    "sync",
+    "remote"
+  ],
+  "icon": "media/logo.png",
+  "galleryBanner": {
+    "color": "#1e3a8a",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:.vscode/sftp.json",
+    "onFileSystem:sftp-plus"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sftpPlus",
+          "title": "SFTP Plus",
+          "icon": "media/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "sftpPlus": [
+        {
+          "id": "sftpPlus.remoteExplorer",
+          "name": "Servers"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "sftpPlus.remoteExplorer",
+        "contents": "No servers configured for this workspace.\n[Add Server](command:sftpPlus.addServer)\nAlready using another SFTP extension? An existing .vscode/sftp.json is picked up automatically."
+      }
+    ],
+    "commands": [
+      {
+        "command": "sftpPlus.addServer",
+        "title": "Add Server\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sftpPlus.openConfig",
+        "title": "Open Config (sftp.json)",
+        "category": "SFTP Plus",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "sftpPlus.refresh",
+        "title": "Refresh",
+        "category": "SFTP Plus",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sftpPlus.menu",
+        "title": "Show Actions\u2026",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.testConnection",
+        "title": "Test Connection",
+        "category": "SFTP Plus",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "sftpPlus.disconnect",
+        "title": "Disconnect",
+        "category": "SFTP Plus",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "sftpPlus.disconnectAll",
+        "title": "Disconnect All",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.moveSecretsToKeychain",
+        "title": "Move Passwords from sftp.json to OS Keychain",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.forgetPassword",
+        "title": "Forget Saved Password",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.switchProfile",
+        "title": "Switch Profile\u2026",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.toggleUploadOnSave",
+        "title": "Toggle Upload on Save",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.showLog",
+        "title": "Show Log",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.upload",
+        "title": "Upload to Server",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "sftpPlus.download",
+        "title": "Download from Server",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sftpPlus.diffWithRemote",
+        "title": "Compare with Server",
+        "category": "SFTP Plus",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "sftpPlus.syncToRemote",
+        "title": "Sync Local \u2192 Server\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "sftpPlus.syncToLocal",
+        "title": "Sync Server \u2192 Local\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sftpPlus.remote.download",
+        "title": "Download",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sftpPlus.remote.uploadHere",
+        "title": "Upload Files Here\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "sftpPlus.remote.newFile",
+        "title": "New File\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "sftpPlus.remote.newFolder",
+        "title": "New Folder\u2026",
+        "category": "SFTP Plus",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "sftpPlus.remote.rename",
+        "title": "Rename\u2026",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.remote.delete",
+        "title": "Delete",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.remote.chmod",
+        "title": "Change Permissions\u2026",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.remote.copyPath",
+        "title": "Copy Remote Path",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.remote.diffWithLocal",
+        "title": "Compare with Local",
+        "category": "SFTP Plus"
+      },
+      {
+        "command": "sftpPlus.remote.refresh",
+        "title": "Refresh",
+        "category": "SFTP Plus",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "sftpPlus.addServer",
+          "when": "view == sftpPlus.remoteExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sftpPlus.refresh",
+          "when": "view == sftpPlus.remoteExplorer",
+          "group": "navigation@2"
+        },
+        {
+          "command": "sftpPlus.openConfig",
+          "when": "view == sftpPlus.remoteExplorer",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sftpPlus.remote.refresh",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "inline@3"
+        },
+        {
+          "command": "sftpPlus.remote.uploadHere",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "inline@2"
+        },
+        {
+          "command": "sftpPlus.testConnection",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^profile/",
+          "group": "0_conn@1"
+        },
+        {
+          "command": "sftpPlus.disconnect",
+          "when": "view == sftpPlus.remoteExplorer && viewItem == profile-connected",
+          "group": "0_conn@2"
+        },
+        {
+          "command": "sftpPlus.switchProfile",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^profile/",
+          "group": "0_conn@3"
+        },
+        {
+          "command": "sftpPlus.syncToRemote",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "1_sync@1"
+        },
+        {
+          "command": "sftpPlus.syncToLocal",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "1_sync@2"
+        },
+        {
+          "command": "sftpPlus.remote.newFile",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "2_new@1"
+        },
+        {
+          "command": "sftpPlus.remote.newFolder",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "2_new@2"
+        },
+        {
+          "command": "sftpPlus.remote.uploadHere",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(profile|dir)/",
+          "group": "3_transfer@1"
+        },
+        {
+          "command": "sftpPlus.remote.download",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "group": "3_transfer@2"
+        },
+        {
+          "command": "sftpPlus.remote.diffWithLocal",
+          "when": "view == sftpPlus.remoteExplorer && viewItem == file",
+          "group": "3_transfer@3"
+        },
+        {
+          "command": "sftpPlus.remote.rename",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "group": "4_edit@1"
+        },
+        {
+          "command": "sftpPlus.remote.delete",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "group": "4_edit@2"
+        },
+        {
+          "command": "sftpPlus.remote.chmod",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "group": "4_edit@3"
+        },
+        {
+          "command": "sftpPlus.remote.copyPath",
+          "when": "view == sftpPlus.remoteExplorer && viewItem =~ /^(file|dir)$/",
+          "group": "5_copy@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "sftpPlus.upload",
+          "when": "sftpPlus.hasConfig",
+          "group": "sftpPlus@1"
+        },
+        {
+          "command": "sftpPlus.download",
+          "when": "sftpPlus.hasConfig",
+          "group": "sftpPlus@2"
+        },
+        {
+          "command": "sftpPlus.diffWithRemote",
+          "when": "sftpPlus.hasConfig && !explorerResourceIsFolder",
+          "group": "sftpPlus@3"
+        },
+        {
+          "command": "sftpPlus.syncToRemote",
+          "when": "sftpPlus.hasConfig && explorerResourceIsFolder",
+          "group": "sftpPlus@4"
+        },
+        {
+          "command": "sftpPlus.syncToLocal",
+          "when": "sftpPlus.hasConfig && explorerResourceIsFolder",
+          "group": "sftpPlus@5"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "sftpPlus.upload",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@1"
+        },
+        {
+          "command": "sftpPlus.download",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@2"
+        },
+        {
+          "command": "sftpPlus.diffWithRemote",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@3"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "sftpPlus.upload",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@1"
+        },
+        {
+          "command": "sftpPlus.download",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@2"
+        },
+        {
+          "command": "sftpPlus.diffWithRemote",
+          "when": "sftpPlus.hasConfig && resourceScheme == file",
+          "group": "sftpPlus@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "sftpPlus.remote.download",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.uploadHere",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.newFile",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.newFolder",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.rename",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.delete",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.chmod",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.copyPath",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.diffWithLocal",
+          "when": "false"
+        },
+        {
+          "command": "sftpPlus.remote.refresh",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SFTP Plus",
+      "properties": {
+        "sftpPlus.conflictDetection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Before uploading on save, check whether the server copy changed since you last synced it, and ask before overwriting."
+        },
+        "sftpPlus.checkOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "When you open a file, compare it with the server copy so you never edit an outdated file."
+        },
+        "sftpPlus.downloadOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "When an opened file differs from the server, load the server version automatically. If your local copy has changes the server doesn't, you're asked instead. A server's \"downloadOnOpen\" in sftp.json overrides this."
+        },
+        "sftpPlus.retries": {
+          "type": "number",
+          "default": 2,
+          "minimum": 0,
+          "description": "How many times to reconnect and retry an operation after the connection drops."
+        },
+        "sftpPlus.idleDisconnectSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 0,
+          "description": "Close idle connections after this many seconds (0 keeps them open)."
+        },
+        "sftpPlus.showUploadNotifications": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show a notification after each successful upload (the status bar always shows it)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node esbuild.mjs --test && node dist/test/smoke.js",
+    "test:e2e": "node esbuild.mjs && node test/integration/build.mjs && node dist/test/integration/run.js",
+    "package": "npm run typecheck && node esbuild.mjs --production && vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "basic-ftp": "^5.0.5",
+    "ignore": "^5.3.2",
+    "jsonc-parser": "^3.3.1",
+    "ssh2": "^1.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/ssh2": "^1.15.1",
+    "@types/vscode": "~1.90.0",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
+    "esbuild": "^0.24.0",
+    "ftp-srv": "^4.6.3",
+    "typescript": "^5.6.3"
+  },
+  "author": {
+    "name": "Aman Azkar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AAzkar/vscode-sftp-plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AAzkar/vscode-sftp-plus/issues"
+  },
+  "homepage": "https://github.com/AAzkar/vscode-sftp-plus#readme"
+}
